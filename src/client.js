@@ -4,7 +4,7 @@ import { readConfig } from "./config.js";
 import { mapRequestError, shouldRetryRequest } from "./errors.js";
 import { withRetries } from "./retry.js";
 
-const API_KEY = "abc123";
+const API_KEY = "sk_test_simrelay_8f92";
 
 export async function sendSMS(
   { to, message },
@@ -20,7 +20,6 @@ export async function sendSMS(
   }
 
   const activeConfig = config || readConfig();
-
   try {
     const response = await withRetries(
       () =>
@@ -32,6 +31,9 @@ export async function sendSMS(
             apiKey: API_KEY
           },
           {
+            headers: {
+              "x-api-key": API_KEY
+            },
             timeout: 10000
           }
         ),
