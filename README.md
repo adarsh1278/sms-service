@@ -1,108 +1,279 @@
 # sms-bridge
 
-Send SMS from Node.js through your own Android phone over local Wi-Fi.
+Send SMS directly from Node.js using your own Android phone over local Wi-Fi — no third-party SMS APIs, no cost, full control.
 
-See [RUNNING.md](./RUNNING.md) for complete local run and test instructions.
+---
 
-## Features
+## 🚀 Overview
 
-- CLI commands: `connect`, `status`, `send`, `secret`
-- mDNS discovery (`_smsbridge._tcp`)
-- Local config persistence for reconnect-free usage
-- SDK exports for programmatic integration
+`sms-bridge` is a CLI + SDK that allows you to send SMS messages through your Android device over a local network.
 
-## Android App Download
+Instead of using paid services like Twilio, this tool:
+- Uses your phone's SIM card
+- Communicates over local Wi-Fi
+- Requires a lightweight Android app running on your device
 
-- GitHub: https://github.com/YadavYashvant/Simrelay
+---
 
-## Install
+## ✨ Features
 
-```bash
-npm install
-npm test
+- Zero-cost SMS (uses your SIM)
+- Works over local network (LAN)
+- Automatic device discovery via mDNS (`_smsbridge._tcp`)
+- CLI + SDK support
+- API key authentication
+- Persistent device connection
+- No internet required
+
+---
+
+## 🏗 Architecture
+
+```
+Node.js CLI / SDK
+        ↓ (HTTP over LAN)
+Android App (Local Server)
+        ↓
+Android SmsManager → Sends SMS
 ```
 
-For local CLI testing:
+---
+
+## 📲 Android App (Required)
+
+You must install and run the Android companion app.
+
+### Download APK
+https://github.com/adarsh1278/sms-service/releases/download/v1.0.0/app-release.apk
+
+### Android App Source Code
+https://github.com/YadavYashvant/Simrelay
+
+---
+
+## 📦 Installation
+
+### Global install (recommended)
 
 ```bash
-npm link
+npm install -g sms-bridge
 ```
 
-Then run:
-
-```bash
-sms-bridge connect
-sms-bridge status
-sms-bridge send --to "+91..." --msg "Hello"
-sms-bridge secret set "sk_your_key"
-```
-
-Or via npx after publish:
+### Or use with npx
 
 ```bash
 npx sms-bridge connect
-npx sms-bridge status
-npx sms-bridge send --to "+91..." --msg "Hello"
-npx sms-bridge secret set "sk_your_key"
 ```
 
-## Change Secret (API Key)
+---
+
+## ⚡ Quick Start
+
+### 1. Connect to your Android device
+
+```bash
+sms-bridge connect
+```
+
+### 2. Check connection status
+
+```bash
+sms-bridge status
+```
+
+### 3. Send an SMS
+
+```bash
+sms-bridge send --to "+919876543210" --msg "Hello from Node.js"
+```
+
+### 4. Set API key (required)
 
 ```bash
 sms-bridge secret set "sk_your_key"
+```
+
+---
+
+## 🔐 API Key Management
+
+### Set key
+
+```bash
+sms-bridge secret set "sk_your_key"
+```
+
+### Show key
+
+```bash
 sms-bridge secret show
+```
+
+### Reset key
+
+```bash
 sms-bridge secret reset
 ```
 
-You can also set it from environment variable (highest priority):
+### Environment Variable (Preferred)
 
 ```bash
 SMS_BRIDGE_API_KEY="sk_your_key"
 ```
 
-On Windows PowerShell:
+### Windows PowerShell
 
 ```powershell
 $env:SMS_BRIDGE_API_KEY="sk_your_key"
 ```
 
-## Android App Requirements
+---
 
-1. Publish mDNS service:
-- Type: `_smsbridge._tcp`
-- Name: device name
-- Port: `3000`
+## 💻 CLI Commands
 
-2. Expose APIs:
+* `sms-bridge connect` → Discover and connect to device
+* `sms-bridge status` → Check device health
+* `sms-bridge send` → Send SMS
+* `sms-bridge secret set` → Set API key
+* `sms-bridge secret show` → Show API key
+* `sms-bridge secret reset` → Reset API key
 
-`POST /send-sms`
+---
+
+## 🧠 How It Works
+
+1. CLI scans network using mDNS (`_smsbridge._tcp`)
+2. User selects a device
+3. Device details are stored locally
+4. CLI sends HTTP request to Android app
+5. Android app sends SMS using native `SmsManager`
+
+---
+
+## 🔌 SDK Usage (Programmatic)
+
+```js
+import { sendSMS } from "sms-bridge";
+
+await sendSMS({
+  to: "+919876543210",
+  message: "Hello from code"
+});
+```
+
+---
+
+## 📡 Android App Requirements
+
+If you are building your own Android app:
+
+### 1. mDNS Service
+
+* Type: `_smsbridge._tcp`
+* Port: `3000`
+* Name: Device name
+
+### 2. API Endpoints
+
+#### POST `/send-sms`
 
 ```json
 {
-  "to": "+91...",
+  "to": "+919876543210",
   "message": "Hello",
-  "apiKey": "abc123"
+  "apiKey": "sk_your_key"
 }
 ```
 
-`GET /health`
+#### GET `/health`
 
 ```json
 {
   "status": "ok",
-  "device": "Adarsh Phone"
+  "device": "My Android Phone"
 }
 ```
 
-## Flow
+---
 
-1. `sms-bridge connect` scans local network and stores the selected device.
-2. `sms-bridge status` checks health of the configured Android device.
-3. `sms-bridge send` sends HTTP payload to Android app, which sends SMS using `SmsManager`.
+## 🧪 Local Development
 
-## Troubleshooting
+Clone the repo:
 
-- Phone and laptop must be on the same network.
-- Android app must be running foreground service.
-- Port and mDNS type must match (`3000`, `_smsbridge._tcp`).
-- Some networks block multicast/mDNS traffic.
+```bash
+git clone https://github.com/adarsh1278/sms-service
+cd sms-service
+npm install
+```
+
+### Run CLI locally
+
+```bash
+npm link
+sms-bridge connect
+```
+
+### Run mock Android server
+
+```bash
+npm run mock
+```
+
+---
+
+## ⚠️ Troubleshooting
+
+### Device not found
+
+* Ensure phone and laptop are on same Wi-Fi
+* Restart router if needed
+* Check mDNS is not blocked
+
+### SMS not sending
+
+* Check SMS permissions on Android
+* Ensure app is running
+* Verify API key
+
+### Connection issues
+
+* Ensure port `3000` is open
+* Disable firewall if needed
+
+---
+
+## 📌 Limitations
+
+* Only works on local network
+* Requires Android device
+* Depends on network reliability
+
+---
+
+## 🚀 Future Improvements
+
+* Auto APK install via CLI
+* QR-based pairing
+* Multi-device support
+* Web dashboard
+* Cloud fallback
+
+---
+
+## 👨‍💻 Author
+
+Adarsh Tiwari
+[https://github.com/adarsh1278](https://github.com/adarsh1278)
+
+---
+
+## 🤝 Credits
+
+Android App Base:
+[https://github.com/YadavYashvant/Simrelay](https://github.com/YadavYashvant/Simrelay)
+
+---
+
+## 📄 License
+
+MIT License
