@@ -3,6 +3,7 @@
 import { connectDevice } from "../src/connect.js";
 import { sendSMS } from "../src/client.js";
 import { checkStatus } from "../src/status.js";
+import { resetSecret, setSecret, showSecret } from "../src/secret.js";
 
 function printUsage() {
   console.log(`
@@ -10,6 +11,9 @@ Usage:
   sms-bridge connect
   sms-bridge status
   sms-bridge send --to "+91..." --msg "Hello"
+  sms-bridge secret set "sk_your_key"
+  sms-bridge secret show
+  sms-bridge secret reset
 
 Also supported:
   sms-bridge send <number> <message>
@@ -65,6 +69,38 @@ try {
     const response = await sendSMS({ to, message });
     console.log("SMS response:", response);
     process.exit(0);
+  }
+
+  if (cmd === "secret") {
+    const action = process.argv[3];
+
+    if (action === "set") {
+      const value = process.argv[4];
+      if (!value) {
+        console.log("Usage: sms-bridge secret set \"sk_your_key\"");
+        process.exit(1);
+      }
+
+      const saved = setSecret(value);
+      console.log("Secret updated:", `${saved.slice(0, 4)}...${saved.slice(-4)}`);
+      process.exit(0);
+    }
+
+    if (action === "show") {
+      const info = showSecret({ masked: true });
+      console.log("Secret:", info.secret);
+      console.log("Config:", info.path);
+      process.exit(0);
+    }
+
+    if (action === "reset") {
+      const reset = resetSecret();
+      console.log("Secret reset to default:", `${reset.slice(0, 4)}...${reset.slice(-4)}`);
+      process.exit(0);
+    }
+
+    console.log("Usage: sms-bridge secret <set|show|reset>");
+    process.exit(1);
   }
 
   printUsage();

@@ -1,10 +1,8 @@
 import axios from "axios";
 
-import { readConfig } from "./config.js";
+import { getApiKey, readConfig } from "./config.js";
 import { mapRequestError, shouldRetryRequest } from "./errors.js";
 import { withRetries } from "./retry.js";
-
-const API_KEY = "sk_test_simrelay_8f92";
 
 export async function sendSMS(
   { to, message },
@@ -20,6 +18,7 @@ export async function sendSMS(
   }
 
   const activeConfig = config || readConfig();
+  const apiKey = getApiKey(activeConfig);
   try {
     const response = await withRetries(
       () =>
@@ -28,11 +27,11 @@ export async function sendSMS(
           {
             to,
             message,
-            apiKey: API_KEY
+            apiKey
           },
           {
             headers: {
-              "x-api-key": API_KEY
+              "x-api-key": apiKey
             },
             timeout: 10000
           }

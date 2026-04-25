@@ -23,6 +23,7 @@ Local shortcut via npm script:
 npm run sms -- connect
 npm run sms -- status
 npm run sms -- send --to "+91..." --msg "Hello"
+npm run sms -- secret set "sk_your_key"
 ```
 
 ## 3. Use command as `sms-bridge`
@@ -44,6 +45,7 @@ sms-bridge send --to "+91..." --msg "Hello"
 sms connect
 sms status
 sms send --to "+91..." --msg "Hello"
+sms secret set "sk_your_key"
 ```
 
 ## 4. Run tests
@@ -60,7 +62,22 @@ After publishing to npm:
 npx sms-bridge connect
 npx sms-bridge status
 npx sms-bridge send --to "+91..." --msg "Hello"
+npx sms-bridge secret set "sk_your_key"
 ```
+
+## 6. Publish to npm
+
+```bash
+npm login
+npm version patch
+npm publish --access public
+```
+
+If package name is already taken, update the `name` field in `package.json` first.
+
+## 7. Android app
+
+- Download app/source: https://github.com/YadavYashvant/Simrelay
 
 ## Android app checklist
 

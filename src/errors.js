@@ -19,21 +19,25 @@ export function shouldRetryRequest(error) {
 
 export function mapRequestError(error, action = "perform request", host = "configured device") {
   const status = error?.response?.status;
+  const apiError = error?.response?.data?.error;
+  const apiErrorSuffix = typeof apiError === "string" && apiError.trim().length > 0
+    ? ` Details: ${apiError.trim()}`
+    : "";
 
   if (NETWORK_ERROR_CODES.has(error?.code)) {
     return new Error(`Network timeout/reachability issue while trying to ${action} on ${host}.`);
   }
 
   if (status === 401 || status === 403) {
-    return new Error(`Authentication failed while trying to ${action}. Check API key on Android app.`);
+    return new Error(`Authentication failed while trying to ${action}. Check API key on Android app.${apiErrorSuffix}`);
   }
 
   if (status === 404) {
-    return new Error(`Endpoint not found while trying to ${action}. Verify Android app routes and port.`);
+    return new Error(`Endpoint not found while trying to ${action}. Verify Android app routes and port.${apiErrorSuffix}`);
   }
 
   if (typeof status === "number") {
-    return new Error(`Device responded with HTTP ${status} while trying to ${action}.`);
+    return new Error(`Device responded with HTTP ${status} while trying to ${action}.${apiErrorSuffix}`);
   }
 
   if (error?.message?.includes("No device configured")) {

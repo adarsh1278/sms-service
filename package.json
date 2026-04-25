@@ -2,14 +2,35 @@
   "name": "sms-bridge",
   "version": "1.0.0",
   "description": "Local SMS bridge CLI and SDK for sending SMS through your Android phone over LAN",
+  "author": "Yashvant Yadav",
   "type": "module",
+  "files": [
+    "bin",
+    "src",
+    "README.md",
+    "RUNNING.md"
+  ],
   "bin": {
     "sms-bridge": "./bin/cli.js",
     "sms": "./bin/cli.js"
   },
+  "engines": {
+    "node": ">=18"
+  },
   "main": "./src/index.js",
   "exports": {
     ".": "./src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YadavYashvant/sms-service.git"
+  },
+  "bugs": {
+    "url": "https://github.com/YadavYashvant/sms-service/issues"
+  },
+  "homepage": "https://github.com/YadavYashvant/sms-service#readme",
+  "publishConfig": {
+    "access": "public"
   },
   "scripts": {
     "start": "node ./bin/cli.js",
@@ -29,7 +50,9 @@
   "license": "MIT",
   "dependencies": {
     "axios": "^1.6.0",
-    "bonjour": "^3.5.0",
+    "bonjour": "^3.5.0"
+  },
+  "devDependencies": {
     "express": "^4.21.2"
   }
 }

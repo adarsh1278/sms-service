@@ -6,10 +6,14 @@ See [RUNNING.md](./RUNNING.md) for complete local run and test instructions.
 
 ## Features
 
-- CLI commands: `connect`, `status`, `send`
+- CLI commands: `connect`, `status`, `send`, `secret`
 - mDNS discovery (`_smsbridge._tcp`)
 - Local config persistence for reconnect-free usage
 - SDK exports for programmatic integration
+
+## Android App Download
+
+- GitHub: https://github.com/YadavYashvant/Simrelay
 
 ## Install
 
@@ -30,6 +34,7 @@ Then run:
 sms-bridge connect
 sms-bridge status
 sms-bridge send --to "+91..." --msg "Hello"
+sms-bridge secret set "sk_your_key"
 ```
 
 Or via npx after publish:
@@ -38,6 +43,27 @@ Or via npx after publish:
 npx sms-bridge connect
 npx sms-bridge status
 npx sms-bridge send --to "+91..." --msg "Hello"
+npx sms-bridge secret set "sk_your_key"
+```
+
+## Change Secret (API Key)
+
+```bash
+sms-bridge secret set "sk_your_key"
+sms-bridge secret show
+sms-bridge secret reset
+```
+
+You can also set it from environment variable (highest priority):
+
+```bash
+SMS_BRIDGE_API_KEY="sk_your_key"
+```
+
+On Windows PowerShell:
+
+```powershell
+$env:SMS_BRIDGE_API_KEY="sk_your_key"
 ```
 
 ## Android App Requirements

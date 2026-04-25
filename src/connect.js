@@ -2,7 +2,7 @@ import readline from "readline/promises";
 import { stdin as input, stdout as output } from "process";
 import axios from "axios";
 
-import { saveConfig, getConfigPath } from "./config.js";
+import { updateConfig, getConfigPath } from "./config.js";
 import { discoverDevices } from "./discovery.js";
 
 async function verifyHost(host) {
@@ -22,7 +22,7 @@ export async function connectDevice() {
   try {
     if (!devices.length) {
       console.log("No devices found via mDNS.");
-      console.log("Tip: Make sure phone and laptop are on same Wi-Fi, and app is advertising _simrelay._tcp.");
+      console.log("Tip: Make sure phone and laptop are on same Wi-Fi, and app is advertising _smsbridge._tcp.");
 
       const hostInput = await rl.question(
         "Enter phone host as IP:port (example 192.168.1.23:3000), or press Enter to cancel: "
@@ -36,7 +36,7 @@ export async function connectDevice() {
 
       try {
         const selected = await verifyHost(host);
-        saveConfig(selected);
+        updateConfig(selected);
         console.log(`Connected to ${selected.name}`);
         console.log(`Saved config at ${getConfigPath()}`);
       } catch {
@@ -59,7 +59,7 @@ export async function connectDevice() {
       return;
     }
 
-    saveConfig(selected);
+    updateConfig(selected);
     console.log(`Connected to ${selected.name}`);
     console.log(`Saved config at ${getConfigPath()}`);
   } finally {
