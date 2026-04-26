@@ -3,6 +3,8 @@
 Send SMS directly from Node.js using your own Android phone over local Wi-Fi — no third-party SMS APIs, no cost, full control.
 
 ---
+### NPM
+https://www.npmjs.com/package/sms-bridge
 
 ## 🚀 Overview
 
@@ -44,7 +46,7 @@ Android SmsManager → Sends SMS
 You must install and run the Android companion app.
 
 ### Download APK
-https://github.com/adarsh1278/sms-service/releases/download/v1.0.0/app-release.apk
+https://github.com/adarsh1278/sms-service/releases
 
 ### Android App Source Code
 https://github.com/YadavYashvant/Simrelay
@@ -156,7 +158,7 @@ $env:SMS_BRIDGE_API_KEY="sk_your_key"
 import { sendSMS } from "sms-bridge";
 
 await sendSMS({
-  to: "+919876543210",
+  to: "+91xxxxxxx",
   message: "Hello from code"
 });
 ```
