@@ -1,6 +1,6 @@
 {
   "name": "sms-bridge",
-  "version": "0.1.2",
+  "version": "0.1.1",
   "description": "Send SMS from Node.js using your Android phone over local network (no external SMS APIs)",
   "author": "Adarsh Tiwari",
   "contributors": [
