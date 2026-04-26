@@ -258,6 +258,13 @@ npm run mock
 * QR-based pairing
 * Multi-device support
 * Web dashboard
+
+---
+
+## 👨‍💻 Developers
+
+* Adarsh portfolio: [adarsh1278.vercel.app](https://adarsh1278.vercel.app/)
+* Yashvant portfolio: [yashvant.tech](https://www.yashvant.tech/)
 * Cloud fallback
 
 ---
